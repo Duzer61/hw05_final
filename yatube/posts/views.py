@@ -114,8 +114,7 @@ def add_comment(request, post_id):
 def follow_index(request):
     """Выводит шаблон страницы с постами авторов
         на которых подписан пользователь"""
-    user = request.user
-    posts = Post.objects.filter(author__following__user=user)
+    posts = Post.objects.filter(author__following__user=request.user)
     page_obj = context_list(posts, request)
     context = {
         'page_obj': page_obj
@@ -126,18 +125,15 @@ def follow_index(request):
 @login_required
 def profile_follow(request, username):
     """Подписывает пользователя на другого автора"""
-    user = request.user
     author = get_object_or_404(User, username=username)
-    if user != author:
-        Follow.objects.get_or_create(user=user, author=author)
+    if request.user != author:
+        Follow.objects.get_or_create(user=request.user, author=author)
     return redirect('posts:profile', username=username)
 
 
 @login_required
 def profile_unfollow(request, username):
     """Отписывает ползователя от другого автора"""
-    user = request.user
     author = get_object_or_404(User, username=username)
-    follow = Follow.objects.filter(user=user, author=author)
-    follow.delete()
+    Follow.objects.filter(user=request.user, author=author).delete()
     return redirect('posts:profile', username=username)
