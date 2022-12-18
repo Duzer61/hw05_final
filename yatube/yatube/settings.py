@@ -143,10 +143,6 @@ LOGIN_REDIRECT_URL = 'posts:index'
 
 POSTS_NUMBER: int = 10  # Количество постов, отображаемых на странице
 
-OK: int = 200  # Код успешного Http запроса
-
-NOT_FOUND: int = 404
-
 # LOGOUT_REDIRECT_URL = 'posts:index'
 
 

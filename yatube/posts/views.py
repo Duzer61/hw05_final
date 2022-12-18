@@ -39,7 +39,6 @@ def profile(request, username):
                      author=author).exists())
     context = {
         'author': author,
-        'posts': posts,
         'post_count': posts_count,
         'page_obj': page_obj,
         'following': following,

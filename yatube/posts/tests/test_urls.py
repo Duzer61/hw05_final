@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from posts.models import Post, Group
-from yatube.settings import OK, NOT_FOUND
 from ..models import User
+from http import HTTPStatus
 
 
 class StaticURLTests(TestCase):
@@ -10,7 +10,7 @@ class StaticURLTests(TestCase):
 
     def test_homepage(self):
         response = self.guest_client.get('/')
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
 
 class PostURLTests(TestCase):
@@ -42,22 +42,22 @@ class PostURLTests(TestCase):
         for adress in adresses:
             with self.subTest(adress=adress):
                 response = self.guest_client.get(adress)
-                self.assertEqual(response.status_code, OK)
+                self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_not_exists_page(self):
         """Запрос к несуществующей странице выдает ошибку 404"""
         response = self.guest_client.get('/unexisting_page/', follow=True)
-        self.assertEqual(response.status_code, NOT_FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     def test_post_edit_exists_at_desired_location(self):
         """Страница /posts/<post_id>/edit/ доступна автору поста"""
         response = self.post_author_client.get('/posts/1/edit/')
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_create_exists_at_desired_location(self):
         """Страница /create/ доступна авторизованному пользователю"""
         response = self.authorized_client.get('/create/')
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_post_edit_url_redirect_not_author_on_post_detail(self):
         """Страница /posts/<post_id>/edit/ перенаправит любого пользователя
